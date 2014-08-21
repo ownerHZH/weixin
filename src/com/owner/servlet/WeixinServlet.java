@@ -112,7 +112,7 @@ public class WeixinServlet extends HttpServlet {
             	int picid=new Random().nextInt(999)+1;
             	String url=GirlsPictureService.downloadUrlToStream(picid);           	
                 //回复一条消息
-                Data4Item d1 = new Data4Item("", "",url,"http://3.weixinowner.sinaapp.com/picshow.jsp?picid="+picid);     
+                Data4Item d1 = new Data4Item("", "",url,"http://127.0.0.1:8080/weixin/BaiDuPicServLet?picid="+picid);     
                 Msg4ImageText mit = new Msg4ImageText();
                 mit.setFromUserName(msg.getToUserName());
                 mit.setToUserName(msg.getFromUserName()); 

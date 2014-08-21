@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -22,58 +23,66 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-	<script type="text/javascript" src="./WEB-INF/jquery/jquery-1.9.1.min.js">
-	
-	var pp=0;
-	$(function(){
-	  $.get("http://3.weixinowner.sinaapp.com/BaiDuPicServLet", { picid:0 },//getUrlParam('picid')
-        function(data){
-           alert(data);
-           $("#meinv").attr('src',data.url);
-           pp=data.picid;
-        },"json");
-	});
-	
-	function pre()
-	{
-	   $.get("http://3.weixinowner.sinaapp.com/BaiDuPicServLet", { picid: parseInt(pp)+1},
-        function(data){
-           alert(data);
-           $("#meinv").attr('src',data.url);
-           pp=data.picid;
-        },"json");
-	}
-	function next()
-	{
-	   $.get("http://3.weixinowner.sinaapp.com/BaiDuPicServLet", { picid: parseInt(pp)+1},
-        function(data){
-           alert(data);
-           $("#meinv").attr('src',data.url);
-           pp=data.picid;
-        },"json");
-	}
-	
-	function getUrlParam(name)
-	{
-		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-		if (r!=null) return unescape(r[2]); return null; //返回参数值
-	}
-	
-	</script>
+	<style type="text/css">
+	  .pre{
+	       float: left;
+	       z-index: 9999;
+	       height: 100%;
+	       width: 50px;
+	       background-position: 19px center; 
+	       background: url('<c:url value="images/previous-arrow.png"></c:url>') no-repeat 24px center;
+	  }
+	  .next{
+	      float:right;
+	      z-index: 9999;
+	      height: 100%;
+	      width: 50px;
+	      background-position: 19px center;
+	       background: url('<c:url value="images/next-arrow.png"></c:url>') no-repeat 24px center;
+	  }
+	</style>
 
-  </head>
+    <script type="text/javascript" src='<c:url value="js/jquery.js" ></c:url>' ></script>
+    </head>
+  
+  <script type="text/javascript">
+     var pp=${picid};
+     $(function(){
+       $("#next").click(function(){
+          $.post("BaiDuPicServLet", { picid:pp},     
+                  function (data, textStatus){    
+				        $("#meinv").attr("src",data.url);
+				        //$("#meinv").src=data.url;
+		                pp=data.picid;        
+			  }, "json");
+       });
+       
+       $("#pre").click(function(){
+       alert("pre");
+		 $.post("BaiDuPicServLet", { picid:pp},     
+                  function (data, textStatus){    
+                        //$("#meinv").attr("src","");
+				        $("#meinv").attr("src",data.url);
+				        //$("#meinv").src=data.url;
+		                pp=data.picid;        
+			  }, "json");
+		 });
+		 
+     });
+  </script>
   
   <body style="background-color: #009ddc">
   
 
-	  <a onclick="pre()" id="pre" style=" float: left;z-index: 9999;height: 100%;width: 50px;background-position: 19px center; background: url(./WEB-INF/images/previous-arrow.png) no-repeat 24px center;"></a>
+	  <a class="pre" id="pre"></a>
 
 	  <div align="center"  style=" float:left; foverflow: hidden;">
-	     <img alt="meimei" align="middle" style="display: block;" id="meinv" src="./WEB-INF/images/4e2cde18e568834c5c0000ce.jpg" />
+	     <img alt="美图" src="${url}" align="middle" style="display: block;" id="meinv" />
 	  </div>
 
-	  <a onclick="next()" id="next" style=" float:right;z-index: 9999;height: 100%;width: 50px;background-position: 19px center; background: url(./WEB-INF/images/next-arrow.png) no-repeat 24px center;"></a>
+	  <a id="next" class="next" ></a>
+	  
+	  <input type="button" id="nnext" value="ddfdsf" />
 	  
     
   </body>

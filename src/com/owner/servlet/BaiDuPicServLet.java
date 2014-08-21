@@ -25,7 +25,6 @@ public class BaiDuPicServLet extends HttpServlet {
 	 * Constructor of the object.
 	 */
 	public BaiDuPicServLet() {
-		super();
 	}
 
 	/**
@@ -50,14 +49,17 @@ public class BaiDuPicServLet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");  
         response.setCharacterEncoding("UTF-8");
+        System.out.println("get-----");
         int picid=Integer.parseInt(request.getParameter("picid"));
-		PrintWriter out = response.getWriter();
+		/*PrintWriter out = response.getWriter();
 		HashMap<String, String> map=new HashMap<String, String>();
 		map.put("url", GirlsPictureService.downloadUrlToStream(picid));
 		map.put("picid", picid+"");
-		out.print(GsonUtil.getGson().toJson(map));
-		out.flush();
-		out.close();
+		out.print(GsonUtil.getGson().toJson(map));*/
+		request.setAttribute("url",GirlsPictureService.downloadUrlToStream(picid));
+		request.setAttribute("picid", picid);
+		request.getRequestDispatcher("./picshow.jsp").forward(request,response);
+		//response.sendRedirect("picshow.jsp");
 	}
 
 	/**
@@ -72,17 +74,18 @@ public class BaiDuPicServLet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		doGet(request,response);
-	}
-
-	/**
-	 * Initialization of the servlet. <br>
-	 *
-	 * @throws ServletException if an error occurs
-	 */
-	public void init() throws ServletException {
-		// Put your code here
+		System.out.println("post-----");
+		request.setCharacterEncoding("UTF-8");  
+        response.setCharacterEncoding("UTF-8");
+        int picid=Integer.parseInt(request.getParameter("picid"));
+        picid++;
+		PrintWriter out = response.getWriter();
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("url", GirlsPictureService.downloadUrlToStream(picid));
+		map.put("picid", picid+"");
+		out.print(GsonUtil.getGson().toJson(map));
+		out.flush();
+		out.close();
 	}
 
 }
